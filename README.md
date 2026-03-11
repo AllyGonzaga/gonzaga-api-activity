@@ -53,3 +53,21 @@ changes their name or other details, I only need to update it in one
 place instead of modifying every dish document. Referencing also helps
 manage document size, especially since MongoDB has a 16MB limit per
 document, preventing the Dish document from becoming too large.
+
+
+# Securing API
+QUESTIONS
+
+1. What is the difference between Authentication and Authorization in our code?
+- **Authentication**: Verifies who the user is. In our code, this happens when a user logs in with an email and password — the system checks if the credentials match an existing account.  
+- **Authorization**: Verifies what an authenticated user is allowed to do. In our code, this controls access to certain routes based on the user’s role (e.g., admin vs regular user).  
+
+2. Why did we use bcryptjs instead of saving passwords as plain text in MongoDB?
+- We use **bcryptjs** to hash passwords instead of saving them as plain text in MongoDB.  
+- Hashing makes passwords unreadable in the database. Even if someone gains access to the database, they cannot see actual passwords. Salting adds extra security against brute-force attacks.  
+
+3. What does the protect middleware do when it receives a JWT from the client?
+- The **protect middleware** checks the JWT sent by the client in the request headers.  
+- It verifies that the token is valid and not expired, then extracts the user information encoded in the token.  
+- This allows the system to confirm the user’s identity and grant access to protected routes.  
+
