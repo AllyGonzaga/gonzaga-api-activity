@@ -11,17 +11,11 @@ const {
 
 const { protect, authorize } = require('../middleware/authMiddleware');
 
-const { registerUser, loginUser } = require('../controllers/authController');
-
-// Auth routes
-router.post('/register', registerUser);
-router.post('/login', loginUser);
-
-// Dish routes
-router.get('/dishes', getAllDishes);
-router.post('/dishes', protect, authorize('admin', 'manager'), createDish);
-router.get('/dishes/:id', getDishById);
-router.put('/dishes/:id', updateDish);
-router.delete('/dishes/:id', deleteDish);
+// Dish routes — use '/' because server.js already mounts at /api/v1/dishes
+router.get('/', getAllDishes);
+router.post('/', protect, authorize('admin', 'manager'), createDish);
+router.get('/:id', getDishById);
+router.put('/:id', updateDish);
+router.delete('/:id', deleteDish);
 
 module.exports = router;

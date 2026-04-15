@@ -114,3 +114,25 @@ Branch coverage tracks whether your tests went through both sides of every `if/e
 > **In our authMiddleware.test.js, why did we use jest.fn() for the next variable, and why did we assert expect(next).not.toHaveBeenCalled() in the failure scenario??**
 
 There's no real Express server running during unit tests, so `next` doesn't exist — we have to make a fake one using `jest.fn()`. It doesn't actually do anything, but it lets us track whether it got called or not. The reason we check `expect(next).not.toHaveBeenCalled()` in the failure cases is because calling `next()` means "let the request through." If our middleware calls it even when the token is missing or wrong, that's a serious bug — it means unauthorized users could get into protected routes. So we assert it wasn't called to make sure our middleware actually blocked the request like it was supposed to.
+
+
+# ACTIVITY 6: The Testing Triangle - Integration Testing
+
+**1. Unit vs. Integration**
+
+>**Explain the difference between the Unit Test you wrote in Activity 5 and the Integration Test you wrote today. What does the Integration Test check that the Unit Test does not?**
+
+Unit Testing (Activity 5) tests a single function (the controller) in complete isolation, the database is `mocked`, so it never actually reads or writes real data. Integration Testing checks that the `Router → Controller → Model → Database` all work together correctly as a system. The Integration Test verifies that data is actually saved in the database, which a Unit Test cannot confirm.
+
+
+**2. In-Memory Databases**
+
+>**Why did we install mongodb-memory-server instead of just connecting our tests to our real MongoDB Atlas URI? Mention at least two reasons.**
+
+We use mongodb-memory-server instead of our real Atlas URI for two reasons: (1) Safety — tests create and delete fake data constantly; connecting to Atlas would pollute or corrupt real production data. (2) Speed & Isolation — a RAM database is much faster than a network connection to Atlas, and each test run starts with a clean slate, making tests reliable and independent.
+
+**3. Supertest**
+
+>**What is the role of supertest in our test file? Why didn't we use Postman for this?**
+
+supertest acts as a fake HTTP client that sends real GET/POST/etc. requests directly to our Express app without needing the server to actually be running on a port. We don't use Postman because Postman is manual; supertest lets us automate and repeat these HTTP checks every time we run npm test, making it part of our CI/CD workflow.
