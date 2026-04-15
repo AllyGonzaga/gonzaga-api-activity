@@ -95,7 +95,7 @@ Here are the same answers, rewritten to sound like a real student wrote them:
 
 **1. Mocking**
 
-> **Why did we mock `Dish.find` and `jwt.verify`? What specific problem does mocking solve in Unit Testing?**
+> **Explain in your own words why we mocked Dish.find and jwt.verify. What specific problem does mocking solve in Unit Testing??**
 
 We mocked them because we don't actually want to connect to a real database or deal with real tokens during testing. If `Dish.find` ran for real, it would need a live MongoDB connection and if that connection is down or the collection is empty, the test fails even if our controller code is perfectly fine. That's not fair to test. Mocking fixes that by letting us say "just pretend this returned some data" so we can focus on what our function actually does with that data. Same idea with `jwt.verify` — we're not testing whether JWT works, we're testing whether our middleware reacts correctly to a valid or invalid token. So we just fake the output and check our logic from there.
 
@@ -103,7 +103,7 @@ We mocked them because we don't actually want to connect to a real database or d
 
 **2. Code Coverage**
 
-> **What does % Branch coverage mean? If your Branch coverage is at 50%, what does that tell you?**
+> **Look at your Jest Coverage report. Explain what % Branch coverage means. If yourBranch coverage is at 50%, what does that tell you about your tests? (Hint: Think about if/else statements).**
 
 Branch coverage tracks whether your tests went through both sides of every `if/else` in your code. Like if you have `if (dish)` that returns a 200, but you never tested what happens when dish is `null`, that else path is uncovered meaning branch coverage goes down. At 50%, it basically means you're only testing the happy path. Your tests probably cover what happens when things go right, but not what happens when they go wrong. That's dangerous because bugs usually hide in those edge cases and error conditions that nobody tested.
 
@@ -111,6 +111,6 @@ Branch coverage tracks whether your tests went through both sides of every `if/e
 
 **3. Testing Middleware**
 
-> **Why did we use `jest.fn()` for `next`, and why did we assert `expect(next).not.toHaveBeenCalled()` in failure scenarios?**
+> **In our authMiddleware.test.js, why did we use jest.fn() for the next variable, and why did we assert expect(next).not.toHaveBeenCalled() in the failure scenario??**
 
 There's no real Express server running during unit tests, so `next` doesn't exist — we have to make a fake one using `jest.fn()`. It doesn't actually do anything, but it lets us track whether it got called or not. The reason we check `expect(next).not.toHaveBeenCalled()` in the failure cases is because calling `next()` means "let the request through." If our middleware calls it even when the token is missing or wrong, that's a serious bug — it means unauthorized users could get into protected routes. So we assert it wasn't called to make sure our middleware actually blocked the request like it was supposed to.
