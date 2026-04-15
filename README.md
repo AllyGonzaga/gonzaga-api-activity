@@ -74,27 +74,8 @@ QUESTIONS
 # ACTIVITY 5 - The Testing Triangle - Comprehensive Unit Testing & Documentation
 
 # Jest Coverage Table
- PASS  src/tests/dishController.test.js
- PASS  src/tests/authMiddleware.test.js
---------------------|---------|----------|---------|---------|-------------------
-File                | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
---------------------|---------|----------|---------|---------|-------------------
-All files           |   85.93 |       75 |      60 |   86.66 |                   
- controllers        |     100 |      100 |     100 |     100 |                   
-  dishController.js |     100 |      100 |     100 |     100 |                   
- middleware         |   76.47 |       75 |   33.33 |   76.47 |                   
-  authMiddleware.js |   76.47 |       75 |   33.33 |   76.47 | 33-40             
- models             |   64.28 |        0 |       0 |   69.23 |                   
-  dishModel.js      |     100 |      100 |     100 |     100 |                   
-  userModel.js      |   54.54 |        0 |       0 |      60 | 30-34,39          
---------------------|---------|----------|---------|---------|-------------------
 
-Test Suites: 2 passed, 2 total
-Tests:       16 passed, 16 total
-Snapshots:   0 total
-Time:        1.645 s
-Ran all test suites.
-
+![alt text](image-2.png)
 ---
 
 # Formal Unit Test Documentation Table
