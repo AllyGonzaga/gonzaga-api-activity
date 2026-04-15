@@ -71,3 +71,65 @@ QUESTIONS
 - It verifies that the token is valid and not expired, then extracts the user information encoded in the token.  
 - This allows the system to confirm the user’s identity and grant access to protected routes.  
 
+# ACTIVITY 5 - The Testing Triangle - Comprehensive Unit Testing & Documentation
+
+# Jest Coverage Table
+ PASS  src/tests/dishController.test.js
+ PASS  src/tests/authMiddleware.test.js
+--------------------|---------|----------|---------|---------|-------------------
+File                | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+--------------------|---------|----------|---------|---------|-------------------
+All files           |   85.93 |       75 |      60 |   86.66 |                   
+ controllers        |     100 |      100 |     100 |     100 |                   
+  dishController.js |     100 |      100 |     100 |     100 |                   
+ middleware         |   76.47 |       75 |   33.33 |   76.47 |                   
+  authMiddleware.js |   76.47 |       75 |   33.33 |   76.47 | 33-40             
+ models             |   64.28 |        0 |       0 |   69.23 |                   
+  dishModel.js      |     100 |      100 |     100 |     100 |                   
+  userModel.js      |   54.54 |        0 |       0 |      60 | 30-34,39          
+--------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 2 passed, 2 total
+Tests:       16 passed, 16 total
+Snapshots:   0 total
+Time:        1.645 s
+Ran all test suites.
+
+---
+
+# Formal Unit Test Documentation Table
+
+
+![alt text](image-1.png)
+
+
+---
+---
+
+Here are the same answers, rewritten to sound like a real student wrote them:
+
+---
+
+## Essay Questions
+
+**1. Mocking**
+
+> **Why did we mock `Dish.find` and `jwt.verify`? What specific problem does mocking solve in Unit Testing?**
+
+We mocked them because we don't actually want to connect to a real database or deal with real tokens during testing. If `Dish.find` ran for real, it would need a live MongoDB connection and if that connection is down or the collection is empty, the test fails even if our controller code is perfectly fine. That's not fair to test. Mocking fixes that by letting us say "just pretend this returned some data" so we can focus on what our function actually does with that data. Same idea with `jwt.verify` — we're not testing whether JWT works, we're testing whether our middleware reacts correctly to a valid or invalid token. So we just fake the output and check our logic from there.
+
+---
+
+**2. Code Coverage**
+
+> **What does % Branch coverage mean? If your Branch coverage is at 50%, what does that tell you?**
+
+Branch coverage tracks whether your tests went through both sides of every `if/else` in your code. Like if you have `if (dish)` that returns a 200, but you never tested what happens when dish is `null`, that else path is uncovered meaning branch coverage goes down. At 50%, it basically means you're only testing the happy path. Your tests probably cover what happens when things go right, but not what happens when they go wrong. That's dangerous because bugs usually hide in those edge cases and error conditions that nobody tested.
+
+---
+
+**3. Testing Middleware**
+
+> **Why did we use `jest.fn()` for `next`, and why did we assert `expect(next).not.toHaveBeenCalled()` in failure scenarios?**
+
+There's no real Express server running during unit tests, so `next` doesn't exist — we have to make a fake one using `jest.fn()`. It doesn't actually do anything, but it lets us track whether it got called or not. The reason we check `expect(next).not.toHaveBeenCalled()` in the failure cases is because calling `next()` means "let the request through." If our middleware calls it even when the token is missing or wrong, that's a serious bug — it means unauthorized users could get into protected routes. So we assert it wasn't called to make sure our middleware actually blocked the request like it was supposed to.
